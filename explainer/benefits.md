@@ -8,11 +8,12 @@ Tiles corners are are defined by spliting a previous level tile by 10 columns an
 <h3>Binary or Decimal</h3>
 <p>
 Map tiles represent the conventional polygons that make up a tile layer. A tile layer is a matrix of image tiles that are superimposed on a an HTML element or digital canvas giving a perception of a continous map.
-<span style='font-size:200px;'>&#9638;</span>. For expalnatory purposes we asume that a map has a bounding box with its northwester corner at 90 &deg; North and -180 &deg; East whereas the Southeastern corner is located at -90 &deg; North and 180 &deg; East.
+<span style='font-size:200px;'>&#9638;</span>.
 A binary tile in a specific zoom level has the corners defined by splitting a tile from a previous zoom level to 4 new tiles (2x2).<BR>
 A decimal tile in a specific zoom level has the corners defined by splitting a tile from a previous zoom level to 100 new tiles (10x10).
 Decimal tiles have one tile in zoom level 0 and 100 tiles in zoom level 1 that making better use of the available characters in the decimal system.
-Decimal tiles may be easier to program, name, manipulate, split, backtrack or join in many situations.
+Decimal tiles may be easier to program, name, manipulate, split, backtrack or join in many situations.<BR>
+For expalnatory purposes we assume that a map has a bounding box with its northwester corner at 90 &deg; North and -180 &deg; East whereas the Southeastern corner is located at -90 &deg; North and 180 &deg; East.
 </p>
 
 <h3>Permiters</h3>
