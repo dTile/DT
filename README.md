@@ -33,7 +33,8 @@ console.log(tile.coords);
 ```
 
 <h3>License</h3>
-DT is released under the [MIT license].
+###
+DT is released under the [MIT license](license.md).
 
 
 ###
