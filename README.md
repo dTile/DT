@@ -35,8 +35,10 @@ console.log(tile.coords);
 
 [About](explainer/about.md)
 
+
+
  
 <h3>License</h3>
 
 ###
-DT is released under the [MIT license](./license)
+DT is released under the [MIT license](LICENSE)
