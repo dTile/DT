@@ -8,7 +8,7 @@ Tiles corners are are defined by spliting a previous level tile by 10 columns an
 <h3>Binary or Decimal</h3>
 <p>
 Map tiles represent the conventional polygons that make up a tile layer. A tile layer is a matrix of image tiles that are superimposed on a an HTML element or digital canvas giving a perception of a continous map.
-<span style='font-size:200px;'>&#9638;</span>
+<span style='font-size:200px;'>&#9638;</span>. For expalnatory purposes we asume that a map has a bounding box with its northwester corner at 90 &deg; North and -180 &deg; East whereas the Southeastern corner is located at -90 &deg; North and 180 &deg; East.
 A binary tile in a specific zoom level has the corners defined by splitting a tile from a previous zoom level to 4 new tiles (2x2).<BR>
 A decimal tile in a specific zoom level has the corners defined by splitting a tile from a previous zoom level to 100 new tiles (10x10).
 Decimal tiles have one tile in zoom level 0 and 100 tiles in zoom level 1 that making better use of the available characters in the decimal system.
@@ -17,8 +17,7 @@ Decimal tiles may be easier to program, name, manipulate, split, backtrack or jo
 
 <h3>Permiters</h3>
 <p>
-A perimeter is defined by adding a peremiter parameter (p) to a decimal tile vector which represent p adjacent tiles to each direction. This means that the premeter contans a cneteral which is part of p+1 times p+1 tiles that make up the permiter.
-A premiter is denoted by concatenating a dot and the perimeter threshold to the central tile. thus 25050.3 represnts a central tile that its northwestern corner is (0 degrees latitude and 0 degrees longitude) "null island" that plus 15 tiles that surround it.
+A perimeter is defined by adding a peremiter threshold (p) to a decimal tile vector which represent p adjacent tiles to each direction. This means that the premeter contains a cneteral tile which is part of (p+1 times p+1) surroundin tiles that make up the permiter.A premiter is denoted by concatenating a dot and the perimeter threshold to the central tile. Thus, 25050.3 (2:50:50:3) represnts a central tile plus 48 tiles that surround it. 25050 represnts a tile hat its northwestern corner is "null island"  (0 degrees latitude and 0 degrees longitude) since it is made up by spliting the map to 100x100 tiles and moving south and east 50 tiles starting from the map northwestern corner.
 </p>
 
 <h3>Motivation</h3>
