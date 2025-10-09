@@ -34,3 +34,7 @@ console.log(tile.coords);
 
 <h3>License</h3>
 DT is released under the [MIT license].
+
+
+<h3></h3>
+[...](explainer/about.md)
