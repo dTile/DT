@@ -18,6 +18,6 @@ Decimal tiles may be easier to program, name, manipulate, split, backtrack or jo
 <h3>Permiters</h3>
 <p>
 A perimeter is defied by adding a peremiter parameter (p) to a decimal tile wich adds p adjacent tiles to each direction. This means that the premeter contans a cneteral tile plus p X p tiles in the permiter.
-A premiter is denoted by concatenating a dot and the perimeter threshold to the central tile. thus 25050.5 represnts a central tile that its northwestern corner is (0 degrees latitude and 0 degrees longitude) "null island" that plus 24 tiles that surround it.
+A premiter is denoted by concatenating a dot and the perimeter threshold to the central tile. thus 25050.4 represnts a central tile that its northwestern corner is (0 degrees latitude and 0 degrees longitude) "null island" that plus 16 tiles that surround it.
 </p>
 
