@@ -13,7 +13,7 @@ A binary tile in a specific zoom level has the corners defined by splitting a ti
 A decimal tile in a specific zoom level has the corners defined by splitting a tile from a previous zoom level to 100 new tiles (10x10).
 Decimal tiles have one tile in zoom level 0 and 100 tiles in zoom level 1 that making better use of the available characters in the decimal system.
 Decimal tiles may be easier to program, name, manipulate, split, backtrack or join in many situations.<BR>
-For expalnatory purposes we assume that a map has a bounding box with its northwester corner at 90 &deg; North and -180 &deg; East whereas the Southeastern corner is located at -90 &deg; North and 180 &deg; East.
+For expalnatory purposes we assume that a map has a bounding box with its northwestern corner at 90 &deg; North and -180 &deg; East whereas the southeastern corner is located at -90 &deg; North and 180 &deg; East.
 </p>
 
 <h3>Permiters</h3>
