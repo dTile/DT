@@ -1,0 +1,22 @@
+<h2>Map Tiles</h2>
+Map tiles represent the conventional polygons that make up a tile layer. A tile layer is a matrix of image tiles that are superimposed on a an HTML element or digital canvas giving a perception of a continous map.
+
+A binary tile in a specific zoom level has the corners defined by splitting a tile from a previous zoom level to 4 new tiles (2x2).
+At zoom level 0 there is only one tile. At zoom level 1 there are 4 tiles that are splitted from the previous tile and so on. So in zoom level 2 there will be 16 tiles (8x8) and in zoom level 3 is made up of 256 tiles (16x16). A tile can be identified by a x-y-z vector or 4 sets of latitude-longitude pairs that represent the corners.
+
+Thus, in zoom level 1 tile "1:0:1" may be assigned the quarter of the earth that is located at the top right corner in the Mercator porjection model. The model projects the earth on a two dimentional rectangle that may include all existing surface coordinates which are confined to coordinates between latitudes -90 and 90 (south and north poles) and longitudes -180 to 180 which meet at the antimeridian.
+Read more on an implementation of binary tiles on a Mercator model
+
+
+<h2>Decimal Tiles</h2>
+Decimal tiles have one tile in zoom level 0 and 100 tiles in zoom level 1. Tiles corners are are defined by spliting a previous level tile by 10 columns and 10 rows. Level 2 of decimal tiles has 10,000 tiles after splitting tiles from the previous zoom leve to 100 new tiles. Decimal tiles may be easier to program, manipulate, split, backtrack or join in many situations.
+
+Decimal tiles can be represented by one number instead of a x-y-z vector. They can be represendted by a number created after concatenating the zoom level with row number and column number (padded with zeros).
+
+The entire earth on a Mercator projection has its bounding box (bbox) designated with the coordinates of [-90,-180,90,180]. A 3000000 represents the top left tile in zoom level 3 and 3999999 represents the bottom right tile in a map. Manhattan is located in the Decimal Tile #3294375 which is confined in a pseudo quadrant (or "bbox") that has its southwest coordinates at 40.70756,-74.16 and the northeast coordinates at 40.9799,-73.8. Basically, Manhattan is located 294 zoom tiles east to the antimeridian (-180°) and 375 tiles south to the north pole at zoom level 3. It is easy to get the "breadcrum" of the previous level by trimming the last x and y digits and decreasing the zoom level by 1. Manahattan is located at tile #3294375 and #22937 (z:2,x:29,y:37). Central Park is located in the mentioned tiles and in tile #429453757. (x: 294 y: 375 zoom: 3)
+
+
+<h2>Mercator Projection Model</h2>
+The Mercator model is a leading standard for showing maps used for navigation. This model is a cylindrical projection of the terrestrial sphere (or ellipsoid) on the surface of a cylinder that is then unrolled as a plane. Originally, this and many map projections are based on a systematic method of drawing the Earth's meridians and latitudes on a flat surface.
+
+The Mercator model distortion increases when moving away from the equator. The distortion impairs an accurate notion of areas making Greenland visually cover an area similar to Africa wereas if the Meridian were swapped with the equator Africa would be about 14 times larger. The implication is that tiles are actually trapezoids visually represented by squares and cover smaller areas when moving towards the poles although they seem to have the same size on a two dimantional map.
