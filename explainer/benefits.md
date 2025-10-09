@@ -21,3 +21,6 @@ A perimeter is defied by adding a peremiter parameter (p) to a decimal tile wich
 A premiter is denoted by concatenating a dot and the perimeter threshold to the central tile. thus 25050.4 represnts a central tile that its northwestern corner is (0 degrees latitude and 0 degrees longitude) "null island" that plus 16 tiles that surround it.
 </p>
 
+<h3>Motivation</h3>
+The decimal tile system (DTS), enables a unified global area definition without the need to specify coordinats. It may solve the problem of governments and lifesaving entities who don't use a well defined and unified systen of proveying traceable, understandable, traceable and unifed permiters. Some governments or counties use their own asymetrical and incoherent delimiting systems because they are afraid of sxposing coordinates of priveate properties or because they want to create inneficient budgeting system that give more possibilites of money laundring or manipulative biddings by the use of red tape and inequal areas sizin and zoning.
+
