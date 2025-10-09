@@ -1,5 +1,5 @@
 <h3>Decimal Tiles</h3>
-Decimal tiles split a navigation map or Meracator projected map into 10 x 10 polygons that visually seem to form perfect squares at the initial zoom level (0). Each zoom level splites a tile from a previous zoom level to 100 new tiles.
+Decimal tiles split a navigation map or Meracator projected map into 10 x 10 polygons that visually seem to form perfect squares at the initial zoom level (0). Each zoom level splits a tile from a previous zoom level to 100 new tiles.
 Decimal tiles can be represented by one number instead of a x-y-z vector by a number concatenating the zoom level with row number and column number (padded with zeros).
 Decimal tiles have one tile in zoom level 0 and 100 tiles in zoom level 1. Tiles corners are are defined by spliting a previous level tile by 10 columns and 10 rows. Level 2 of decimal tiles has 10,000 tiles after splitting tiles from the previous zoom leve to 100 new tiles. Decimal tiles may be easier to program, name, manipulate, split, backtrack or join in many situations.
 A perimeter is defied by adding a peremiter parameter (p) to a decimal tile wich adds p adjacent tiles to each direction. This means that the premeter contans a cneteral tile plus p X p tiles in the permiter;
