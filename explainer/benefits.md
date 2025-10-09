@@ -5,10 +5,9 @@ Decimal tiles can be represented by one number instead of a x:y:z vector by conc
 Tiles corners are calculated by spliting a previous level tile by 10 columns and 10 rows. Level 2 of decimal tiles has 10,000 tiles after splitting tiles from the previous zoom leve to 100 new tiles. 
 </p>
 
-<h3>Binary or Decimal</h3>
+<h3>Binary or Decimal&#9638;</h3>
 <p>
 Map tiles represent the conventional polygons that make up a tile layer. A tile layer is a matrix of image tiles that are superimposed on a an HTML element or digital canvas giving a perception of a continous map.
-<span style='font-size:200px;'>&#9638;</span>.
 A binary tile in a specific zoom level has the corners defined by splitting a tile from a previous zoom level to 4 new tiles (2x2).<BR>
 A decimal tile in a specific zoom level has the corners defined by splitting a tile from a previous zoom level to 100 new tiles (10x10).<BR>
 Decimal tiles have one tile in zoom level 0 and 100 tiles in zoom level 1 that making better use of the available characters in the decimal system.
