@@ -8,9 +8,7 @@ Decimal tiles can be represented by one number instead of a x-y-z vector by conc
 A perimeter is defined by adding a peremiter threshold (p) to a decimal tile vector which represent p adjacent tiles to each direction. This means that the premeter contains a cneteral tile which is part of (p+1 times p+1) surrounding tiles that make up the permiter. A premiter is denoted by concatenating a dot and the perimeter threshold to the central tile.</p>
 
 
-### CDN
-
-Link directly to Masonry files on [jsdelivr](https://jsdelivr.net/).
+CDN
 
 ``` html
 <script src="https://cdn.jsdelivr.net/gh/dTile/DT/dist/dtile.js"></script>
