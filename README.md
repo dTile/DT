@@ -11,8 +11,9 @@ A perimeter is defined by adding a peremiter threshold (p) to a decimal tile vec
 ``` html
 <script src="https://cdn.jsdelivr.net/gh/dTile/DT/dist/dtile.js"></script>
 ```
-
+<BR>
 <h3>JS</h3>
+```
 // vanilla JS
 // init with element
 var geoJSON = DT.perimJSON(25050,3);
