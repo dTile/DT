@@ -1,11 +1,11 @@
 <h3>Decimal Tiles</h3>
-<p>
-Decimal tiles split a navigation map or Meracator projected map into 10 x 10 polygons that visually seem to form perfect squares at the initial zoom level (1). Each zoom level splits a tile from a previous zoom level to 100 new tiles.
-Decimal tiles can be represented by one number instead of a x:y:z vector by concatenating the zoom level with row number and column number (padded with zeros).
-</p>
+Decimal tiles enamble a unified refering system for spatial areas on earth instead or an arlternative or complementary set of coordinates by using unique numbers overcoming the need for using vectors, commas, minuts or seconds. Decimal tiles split a navigation map or Meracator projected map into 10 x 10 matrices of polygons. The polygons visually seem to form perfect adjacent squares or a grid. The tiles are actually trapezoids that look like square due to earh curvature. Each drill-down level splits a tile from a previous zoom level to 100 new tiles.
+Decimal tiles can be represented by one number instead of a vector by concatenating the zoom level with row number and column number (padded with zeros). A tile number shares the digits of its ancestors whicm makes zooming and joining or spliting tiles more understandable.
+<br>
 
-<h3>Permiters</h3><p>
-A perimeter is defined by adding a peremiter threshold (p) to a decimal tile vector which represent p adjacent tiles to each direction. This means that the premeter contains a cebtral tile which is part of (p+1 times p+1) surrounding tiles that make up the permiter. A premiter is denoted by concatenating a dot and the perimeter threshold to the central tile.</p>
+<h3>Permiters</h3>
+A perimeter is defined by adding a peremiter threshold (p) to a decimal tile vector which represent p adjacent tiles to each direction. This means that the premeter contains a central tile which is part of a matrix which has (p x 2) + 1 columns and rows that make up the permiter. A premiter is denoted by concatenating a dot and the perimeter threshold to the central tile.
+<br>
 
 <h3>CDN</h3>
 
@@ -13,7 +13,8 @@ A perimeter is defined by adding a peremiter threshold (p) to a decimal tile vec
 ``` html
 <script src="https://cdn.jsdelivr.net/gh/dTile/DT/dist/dtile.js"></script>
 ```
-<BR>
+
+
 <h3>JS</h3>
 
 ###
@@ -31,18 +32,19 @@ console.log(tile.coords);
 
 
 ```
-
+<br>
 
 [About](explainer/about.md)
 
+<br>
+
 [Demo](https://dtile.github.io/DT/test/)
 
- 
+
+
+ <hr>
 <h3>License</h3>
 
 ###
 DT is released under the [MIT license](LICENSE)
 
-
-Comments:
-[^1] Although map tiles look like square in reality a tile is a trapezoid that gets smaller and smaller when moving away from the equator due to earth curvature and the Mercator projection distortion.
