@@ -3,7 +3,7 @@ Decimal tiles enable a unified referring system for areas on the surface of the 
 <br>
 
 <h3>Permiters</h3>
-A perimeter is defined by adding a perimeter threshold (p) to a decimal tile vector or number which represents p adjacent tiles to each direction. This means that the perimeter contains a central tile which is part of a matrix that has (p x 2) + 1 columns and rows. A perimeter is denoted by concatenating a dot and the perimeter threshold to the central tile. The API converts tiles or perimeters to coordinates which can be suppoerimposed on mapping systems or naviagation applications as grids or interactive areas. The API enables generation of geoJSON objects that contain tile coordinates and namesdefinitions of perimeters.
+A perimeter is defined by adding a perimeter threshold (p) to a decimal tile vector or number which represents p adjacent tiles to each direction. This means that the perimeter contains a central tile which is part of a matrix that has (p x 2) + 1 columns and rows. A perimeter is denoted by concatenating a dot and the perimeter threshold to the central tile. The API converts tiles or perimeters to coordinates which can be suppoerimposed on mapping systems or naviagation applications as grids or interactive areas. The API enables generation of geoJSON objects that contain tile coordinates and metadata of the perimeters and the tiles within.
 <br>
 
 <h3>CDN</h3>
