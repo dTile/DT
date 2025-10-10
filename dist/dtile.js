@@ -1,7 +1,6 @@
 var dTile=(function(){
 var root = {x:0,y:0,z:0};
 
-
 // tile factory
 
 /**
@@ -28,41 +27,25 @@ this.x = Number(x);
 this.y = Number(y);
 this.z = Number(z);
 }else if(y){
-
 }
 return this
 }
 
 
-/*
-tile.prototype.encode = function(xClass,yClass,zClass){
-//debugger;
-var z = this.z
-var st="";
-var n=Math.pow(10,z);
-var xmod=this.x % n;
-var ymod=this.y % n;
-if(xmod<0){xmod+=n};
-var paddedY=String(ymod).padStart(z,'0');
-var paddedX=String(xmod).padStart(z,'0');
-st=z + paddedX + paddedY;
-if(xClass){
-st='<b><span class="'+ zClass +'">' +z +'</span><span class="'+ xClass +'">' + paddedX +'</span><span class="'+ yClass +'">'+ paddedY+'</span></b>';
-}	
-return st;
-}
+/**
+* Returns a tile that surrounds [lat,lng] point in a drilldown level.
+*
+* @param   {number} lat .
+* @param   {number} lng .
+* @param   {number} drillLevel .
+* @returns {tile} .
+*
 */
 
-
-function get(lat,lng,maxLevel,per){
-//var bingo;
-//var o = split10(q,lat,lng,maxLevel,2)
-var o = drill(root,lat,lng,maxLevel,2)
-//if(o.bingo){bingo=o.bingo}
-//return bingo
+function get(lat,lng,drillLevel,p){
+var o = drill(root,lat,lng,drillLevel,p)
 return o
 }
-
 
 
 /**
@@ -72,7 +55,7 @@ return o
 * @returns {number} .
 *
 * @example
-*     var myTile = new LatLon(52.205, 0.119);
+* var myTile = new LatLon(52.205, 0.119);
 */
 
 var encode=function(x,y,z,p,xClass,yClass,zClass){
@@ -88,7 +71,7 @@ var paddedX=String(xmod).padStart(z,'0');
 st=z + paddedX + paddedY + perim;
 if(xClass){
 st='<b><span class="'+ zClass +'">' +z +'</span><span class="'+ xClass +'">' + paddedX +'</span><span class="'+ yClass +'">'+ paddedY+'</span>'+perim+'</b>';
-}	
+}
 return st;
 }
 
@@ -100,10 +83,13 @@ return st;
 *
 */
 
-function decode(l){
+function decode(l,precision){
 var st="" + l;
+var p=0;
 var arr = st.split(".");
-if(arr.length>1){p=arr[1]}
+if(arr.length>1){
+p=parseInt(arr[1])
+}
 st = arr[0];
 st=st.slice(1);
 const middleIndex=Math.floor(st.length / 2);
@@ -112,7 +98,7 @@ var x=parseInt(firstPart);
 const secondPart=st.substring(middleIndex);
 var y=parseInt(secondPart);
 var z=firstPart.length;
-return dtXYZ(x,y,z,p);
+return dtXYZ(x,y,z,p,precision);
 }
 
 
@@ -127,10 +113,13 @@ return dtXYZ(x,y,z,p);
 */
 
 
-function dtXYZ(x,y,z,precision){
+function dtXYZ(x,y,z,perimeter,precision){
 var v;
 if(z){
 v={x:x,y:y,z:z,name:x+':'+y+':'+z,number:encode(x,y,z)};
+if(perimeter){
+v.p=perimeter;
+}
 var pi=Math.PI,n=Math.pow(10,z);
 let lngNW=x / n * 360 - 180;
 let latNW=180 * Math.atan(Math.sinh(pi * (1 - 2 * y / n))) / pi;
@@ -167,28 +156,38 @@ return v;
 function perimJSON(l,perimeter,precision){
 var quads = perim(l,perimeter,precision,true);
 var features=[];
+var bbox = [];
+var pbox = [];
 quads.forEach((quad)=>{
 if(quad.coords){
 var params={name:quad.number,type:quad.type,noFill:1};
 if(quad.type=="perimeter"){
+pbox=[quad.sw[1],quad.sw[0],quad.ne[1],quad.ne[0]];
 params.color="red";
 }
+
 var ftr=feature(quad.coords,params)
+if(quad.type=="bingo"){
+bbox=[quad.sw[1],quad.sw[0],quad.ne[1],quad.ne[0]];
+ftr.bbox = bbox;
+}
 features.push(ftr);
 }
 })
-var json={type:"FeatureCollection",features:features};
+var json={type:"FeatureCollection",features:features,bbox:pbox};
 json=JSON.stringify(json,null,2);
 return json
 }
 
 function tileJSON(x,y,z,precision){
-var quad = dtXYZ(x,y,z,precision)
+var quad = dtXYZ(x,y,z,null,precision)
 var features=[];
 
 if(quad.coords){
 var params={name:quad.number,type:quad.type,noFill:1};
-var ftr=feature(quad.coords,params)
+var ftr=feature(quad.coords,params);
+var bbox=[quad.sw[1],quad.sw[0],quad.ne[1],quad.ne[0]];
+ftr.bbox = bbox;
 features.push(ftr);
 }
 
@@ -196,7 +195,6 @@ var json={type:"FeatureCollection",features:features};
 json=JSON.stringify(json,null,2);
 return json
 }
-
 
 
 /**
@@ -212,7 +210,7 @@ return json
 function perim(l,perimeter,precision,grid){
 var quads =[];
 var st = "" + l;
-//debugger;
+st=st.split(".")[0]
 st = st.slice(1);
 const middleIndex = Math.floor(st.length / 2);
 const firstPart = st.substring(0, middleIndex);
@@ -237,25 +235,25 @@ if(yBottom>=maxY){yTop=maxY-1}
 var yBottom = y+perimeter;
 for (let i = xLeft ; i <= xRight; i++){
 for (let j = yTop; j <= yBottom; j++){
-var v = dtXYZ(i,j,z,precision);
+var v = dtXYZ(i,j,z,null,precision);
 v.type = "dtile";
 if(grid){quads.push(v)};
 if(i==xLeft && j==yTop){
 main.nw=v.nw;
 main.nwNumber = v.number;
 }
-if(i==xLeft && j==yBottom){	
+if(i==xLeft && j==yBottom){
 main.sw=v.sw;
 main.swNumber = v.number;
-}	
-if(i==xRight && j==yBottom){	
+}
+if(i==xRight && j==yBottom){
 main.se=v.se;
 main.seNumber = v.number;
-}	
-if(i==xRight && j==yTop){	
+}
+if(i==xRight && j==yTop){
 main.ne=v.ne;
 main.neNumber = v.number;
-}	
+}
 }
 }
 main.x=x;
@@ -294,7 +292,6 @@ return ret
 * @returns {array} or tiles
 */
 
-
 function split100(x,y,z){
 var quads;
 var pi = Math.PI;
@@ -310,7 +307,6 @@ var yLoc = y * 10  + j;
 var quad=[];
 var startLng = 180;
 let lngNW = ((xLoc) * incr)  * 360 - startLng;
-//if(i==1 && j==1){debugger;}
 lrad = Math.atan(Math.sinh(pi * (1 - 2 * (yLoc) * incr)));
 let latNW = 180 * lrad / pi;
 
@@ -326,14 +322,6 @@ let lngNE = ((x * 10  + i + 1) * incr)  * 360 - startLng;
 lrad = Math.atan(Math.sinh(pi * (1 - 2 * (yLoc) * incr)));
 let latNE = 180 * lrad / pi;
 var newQuad={}
-/*
-quad.push([latSW,lngSW]);
-quad.push([latNW,lngNW]);
-quad.push([latNE,lngNE]);
-quad.push([latSE,lngSE]);
-quad.push([latSW,lngSW]);
-newQuad.coords = quad;
-*/
 newQuad.z = z + 1;
 newQuad.x = x*10+i;
 newQuad.sw = [latSW,lngSW];
@@ -344,7 +332,7 @@ newQuad.y = y*10+j;
 newQuad.type = "dtile";
 newQuad.number = encode(newQuad.x,newQuad.y,newQuad.z);
 quads.push(newQuad)
-}	
+}
 }
 }
 return quads
@@ -386,8 +374,6 @@ if (isInT(lat,lng,q)){
 found = q;
 }
 })
-//debugger;
-
 
 if(z+1<maxLevel && found){
 return drill(found,lat,lng,maxLevel)
@@ -416,6 +402,13 @@ var feature={
 return feature
 }
 
+
+function nFormat(num, precision) {
+if (precision === false){return num;}
+var pow = Math.pow(10, precision === undefined ? 6 : precision);
+return Math.round(num * pow) / pow;
+}
+
 var exports = {
 tile:tile,
 tileJSON:tileJSON,
@@ -426,7 +419,8 @@ dtXYZ:dtXYZ,
 perim:perim,
 perimJSON:perimJSON,
 decode:decode,
-split100:split100
+split100:split100,
+nFormat,nFormat
 }
 
 //return exports;
