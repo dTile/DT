@@ -1,7 +1,7 @@
 <h3>Decimal Tiles</h3>
 <p>
 Decimal tiles split a navigation map or Meracator projected map into 10 x 10 polygons that visually seem to form perfect squares at the initial zoom level (1). Each zoom level splits a tile from a previous zoom level to 100 new tiles.
-Decimal tiles can be represented by one number instead of a x-y-z vector by concatenating the zoom level with row number and column number (padded with zeros).
+Decimal tiles can be represented by one number instead of a x:y:z vector by concatenating the zoom level with row number and column number (padded with zeros).
 </p>
 
 <h3>Permiters</h3><p>
@@ -35,10 +35,14 @@ console.log(tile.coords);
 
 [About](explainer/about.md)
 
-
+[Demo](https://dtile.github.io/DT/test/)
 
  
 <h3>License</h3>
 
 ###
 DT is released under the [MIT license](LICENSE)
+
+
+Comments:
+[^1] Although map tiles look like square in reality a tile is a trapezoid that gets smaller and smaller when moving away from the equator due to earth curvature and the Mercator projection distortion.
