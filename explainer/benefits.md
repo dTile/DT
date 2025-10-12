@@ -14,7 +14,7 @@ A decimal tile in a specific zoom level has the corners defined by splitting a t
 > [!NOTE]
 > Tiles visually seem to form perfect adjacent squares or a grid. The tiles are actually trapezoids that look like squares due to earth curvature under the Mercator projection model. For simplicy we assume a map is a 2 dimentional digital canvas that has its northwestern corner at 90&deg;N,-180&deg;E and the opposing corner at -90&deg;N,180&deg;E.
 
-<h3>Permiters</h3>
+<h3>Perimeters</h3>
 <p>
 A perimeter is defined by adding a peremiter threshold (p) to a decimal tile vector which represent p adjacent tiles to each direction. This means that the perimeter contains a central tile which is part of (p+1 times p+1) surrounding tiles that make up the permiter. A premiter is denoted by concatenating a dot and the perimeter threshold to the central tile. Thus, 25050.3 (2:50:50:3) represnts a central tile plus 48 tiles that surround it. 25050 represnts a tile hat its northwestern corner is "null island"  (0&deg; latitude and 0 &deg; longitude) since it is made up by spliting the map to 100x100 tiles and moving south and east 50 tiles starting from the map northwestern corner.An API can return an array of tiles and a geoJSON object that represntes the latitudes and longitudes of the polygons that make up the perimeter including the tiles and the outline after making the proper calculations. The use of perimeters has 2 main benfits:
 <ol>
@@ -23,10 +23,12 @@ A perimeter is defined by adding a peremiter threshold (p) to a decimal tile vec
 </ol>
 </p>
 
+![Perimeter](https://dtile.github.io/DT/media/perim.png?raw=true)
+
 <h3>Motivation</h3>
 The decimal tile system (DTS), enables a unified global area definition without a need to specify coordinats or a clumsy system of comma delimited arrays or degrees, minutes and seconds. It may solve the problem of governments and lifesaving entities who don't use a well defined and unified system of proveying, understandable, comparable, traceable and unifed permiters needed for evacuations, alrest and coordination of response teams. Some governments or counties use their own asymetrical and incoherent delimiting systems because they are afraid of sxposing coordinates of priveate properties or because they want to create inneficient budgeting system that give more possibilites of money laundring or manipulative biddings by the use of red tape and inequal areas sizin and zoning.
 
-<h3>Overcoming Notation incoherency&#9638;</h3>
+<h3>Overcoming Notation Incoherency&#9638;</h3>
 The North-Easting or the East-Northing coordinate notation systema have many incoherent formats where some applications use spaces, bearings, commas, minutes, degrees and seconds in differnt ways. Even barcoding a coordinate is cumbersome, since the degree symbol or the commas are not supported in various machines. The conventional map image tiling systems (x:y:z) make it difficult to humans to understand how far a tile is located from the meridian, equator or poles since a calculation of a binary math power by 2 is needed to understand its position. The DTS system simplifies and make a coherent notation of geolocations by pixelizing a map to decimal digits in chunks of 10x10 matrices putting the drilldown level up in front of the tile notation. The granularity of at 8 drilldown level achieves areas of 0.3 meters which may be enough for real estate purposes. Tourism, evacuation maps and nature disaster alerts may use drilldown level 6 or 5.
 <hr>
 
