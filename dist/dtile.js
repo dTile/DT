@@ -1,6 +1,7 @@
 var dTile=(function(){
-var version = "v0.0.5";
 var root = {x:0,y:0,z:0};
+const version = "0.0.6";
+
 /**
 * Returns a tile that surrounds [lat,lng] point in a drilldown level.
 *
@@ -471,6 +472,7 @@ ok=1;
 }
 return ok;	
 }
+
 function nFormat(num, precision) {
 if (precision === false){return num;}
 var pow = Math.pow(10, precision === undefined ? 6 : precision);
@@ -478,7 +480,6 @@ return Math.round(num * pow) / pow;
 }
 
 var exports = {
-  varsion:version,
 tile:tile,
 feature:feature,
 get:get,
@@ -493,6 +494,7 @@ decode:decode,
 split100:split100,
 nFormat:nFormat,
 validTN:validTN,
+version:version
 }
 
 //return exports;
