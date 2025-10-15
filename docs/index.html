@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<title>Decimal Tiles</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8">
 <meta name="author" content="">
@@ -14,7 +15,7 @@ https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.min.js
 <link href="
 https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.min.css
 " rel="stylesheet">
-
+<link rel="icon" href="favicon.ico" />
 <style>
 input {
   text-align: center;
@@ -138,7 +139,7 @@ vertical-align:middle;
 <button id=btnApply type=button class=sbutton title="Add tiles around the center of the map">Grid on center</button>
 <br>
 
-<span title = "Drill-down level">Level:</span><input class=tinyinput id=level value=4 type="number" min="0" max="9">&nbsp;
+<span title = "Drill-down level">Drilldown:</span><input class=tinyinput id=level value=4 type="number" min="0" max="9">&nbsp;
 <span>Perimeter:</span><input class=tinyinput id=perimeter value=5 type="number" min="0" max="20">&nbsp;
 <span>Precision:</span><input class=tinyinput id=precision value=7 type="number" min="6" max="12">&nbsp;
 <br>
@@ -335,7 +336,7 @@ var pr=DT.perim(bingo.number,perimeter,6,true);
 var perim = pr.outline;
 
 //var bounds=plPerim.getBounds();
-//debugger;
+
 var bounds=perim.coords;
 setTimeout(()=>{
 map.fitBounds(bounds,{padding:[0,0]})},
@@ -375,7 +376,7 @@ pInfo(square.number)
 })
 
 plPerim.addTo(map.tiles10);
-//debugger;
+
 var qPopup = qInfo(bingo.number);
 pInfo(square.number);
 map.popupPlace=map.getCenter();
@@ -385,9 +386,6 @@ map.popupPlace=map.getCenter();
 //bindTooltip(square.na)
 }
 }
-
-
-
 
 
 
@@ -414,28 +412,18 @@ var perimeter = p2perim(tl);
 var det ="";
 var tile = p2tile(tl)
 var o = DT.outline(tile,perimeter,6);
-//console.log(o)
 
 var q = o.outline;
-/*
-o.forEach((sq)=>{
-	if(sq.type=="perimeter"){
-		q = sq;
-	}
-})
-*/
-//console.log(q)
-
 if(q){
 var corners="[[" + q.sw + "],[" + q.nw + "],[" + q.ne + "],[" + q.se+"]]";
 var width = getWidth(q.coords);
 if(width > 1000){
 width=width / 1000
 var miles=DT.nFormat(width  /  1.609343502101154,2)
-width=width + " km / "
-width+=miles + " miles"
+width=width + " km / ";
+width+=miles + " miles";
 }else{
-width=width + " meters"
+width=width + " meters";
 }
 
 var det="<div class=sbutton>";
