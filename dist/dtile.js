@@ -1,5 +1,5 @@
 var dTile=(function(){
-//v0.0.5
+var verions = "v0.0.5";
 var root = {x:0,y:0,z:0};
 /**
 * Returns a tile that surrounds [lat,lng] point in a drilldown level.
@@ -478,6 +478,7 @@ return Math.round(num * pow) / pow;
 }
 
 var exports = {
+  varsion:version,
 tile:tile,
 feature:feature,
 get:get,
