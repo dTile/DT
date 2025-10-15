@@ -454,7 +454,8 @@ return ok;
 
 function validTN(tn){
 var ok;
-n = Math.floor(Number(tn));
+n = Number(tn);
+//n = Math.floor(Number(tn));
 if(n !== Infinity && String(n) === tn && n >= 0){
 var st="" + tn;
 var p=0;
@@ -470,7 +471,6 @@ ok=1;
 }
 return ok;	
 }
-
 function nFormat(num, precision) {
 if (precision === false){return num;}
 var pow = Math.pow(10, precision === undefined ? 6 : precision);
