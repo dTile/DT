@@ -1,5 +1,5 @@
 var dTile=(function(){
-var verions = "v0.0.5";
+var version = "v0.0.5";
 var root = {x:0,y:0,z:0};
 /**
 * Returns a tile that surrounds [lat,lng] point in a drilldown level.
