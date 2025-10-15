@@ -8,18 +8,20 @@
 <meta name="keywords" content="Map Tiles">
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/dTile/DT/dist/dtile.js"></script>
-<!--script src="/_assets/js/dtile.js"></script-->
 <script src="
 https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js
 "></script>
 <link href="
 https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css
 " rel="stylesheet">
+
 <style>
+input {
+  text-align: center;
+}
 .rel{
 position:relative
 }
-
 .hidden{
 visibility:hidden;
 }
@@ -55,46 +57,133 @@ float:left !important;
 position:absolute;
 bottom:3px;
 left:3px;
-z-index:1001;
+z-index:2001;
+}
+.top-left{
+position:absolute;
+top:3px;
+left:3px;
+z-index:2001;
 }
 .top-right{
 position:absolute;
 top:3px;
 right:3px;
-z-index:1001;
+z-index:2001;
 }
-
 .opacity5{opacity:0.5;}
 .vlabel{
-background-color:black;
+box-sizing:border-box;
+border-radius:2px;
+text-align:center;
+text-decoration:none;
+margin:2px;
+outline:1px solid;
+outline-offset:-2px;
+display:inline-block;
+background-color:white;
 cursor:pointer;
-color:white;
+opacity:0.8;
+color:black;
 font-size:12px;
-padding:1px;
+padding:1px 2px;
 margin:1px;
 font-weight:600;
 opacity:0.95;
 }
+.box{
+display: flex;
+flex-flow: column;
+height: 100%;
+}
+/*
+body {
+height: 100%;
+margin: 0;
+}*/
+.box .row {
+border: 0px dotted grey;
+}
+.box .row.header {
+flex: 0 1 60px;
+}
+.box .row.content {
+flex: 1 1 auto;
+}
+.box .row.footer {
+flex: 0 1 40px;
+}
+.noscroll{
+overflow-x:hidden!important;scrollbar-width:none!important;
+}
+.xauto{
+padding:0;
+margin:0;
+margin-right:auto!important;
+margin-left:auto!important;
+width:100%;
+text-align:center;
+vertical-align:middle;
+}
 </style>
+
 </head>
-<body id=dbody style1="overflow-x:hidden!important;scrollbar-width:none!important;">
-<div class=rel>
-level:<input class=tinyinput id=level value=4 type="number" min="0" max="9">&nbsp;
-Perimeter:<input class=tinyinput id=perimeter value=5 type="number" min="0" max="20">&nbsp;
-Precision:<input class=tinyinput id=precision value=7 type="number" min="6" max="12">&nbsp;
-<button id=btnApply type=button class=sbutton title="Add tiles around the center of the map">Apply</button>
-<button id=btnClear type=button class=sbutton>clear</button><BR>
-Marker:<input class=tinyinput1 id="m-coords" value="0,0" type="search">
-<button id=btnSurround type=button class=sbutton>Surround</button>
+<body id=dbody class=xauto style="overflow-x:hidden!important;scrollbar-width:none!important;">
+<div class="box xauto noscroll">
+
+<div class="row header xauto">
+<b>dTiles Demo:&nbsp;
+<button id=btnApplyGeo type=button class=sbutton title="Get tile of geolocation">Here</button>
+<button id=btnClear type=button class=sbutton>clear</button>
+<button id=btnApply type=button class=sbutton title="Add tiles around the center of the map">Grid on center</button>
+<br>
+
+<span title = "Drill-down level">Level:</span><input class=tinyinput id=level value=4 type="number" min="0" max="9">&nbsp;
+<span>Perimeter:</span><input class=tinyinput id=perimeter value=5 type="number" min="0" max="20">&nbsp;
+<span>Precision:</span><input class=tinyinput id=precision value=7 type="number" min="6" max="12">&nbsp;
+<br>
+
+<span title=tile>Tile:</span>
+<input class=tinyinput1 id="m-number" value="25050" placeholder="valid tile number" type="search">
+<button id=btnCopyTN type=button class=sbutton>&#128203;</button>
+<button id=btnApplyNumber type=button class=sbutton title="">Show tile</button>
+<br>
+
+<span title=Marker>&#128392;</span><input class=tinyinput1 id="m-coords" value="0,0" type="search">
+<button id=btnCopyM type=button class=sbutton>&#128203;</button>
+<button id=btnSurround type=button class=sbutton>Grid&#9638;</button>
+<button id=btnOutline type=button class=sbutton>Outline&#x22A1;</button>
+
 <span id="curr-zoom"></span>
-<span id="extras"></span>
-<BR>
-<div id=maph class=maph1 style="width:100%;height: calc(100vh - 80px); background-color: lightblue;">
+
+<br>
 </div>
-<div id=message-area class="hidden bottom-left">
+
+<div map-area class="row content rel1 xauto">
+<div id=maph class=maph1 style1="width:100%;height:100%; background-color:lightblue;" style="width:100%;height: calc(100vh - 150px); background-color: lightblue;">
+<div id=message-area class="hidden top-right">
 <div id=message-text class="vlabel">
 </div>
 </div>
+<div id=info-area class="hidden bottom-left">
+<div id=info-text class="vlabel">
+</div>
+</div>
+<div id=opt-area class="top-left">
+<div id=opt-text class="vlabel">
+</div>
+</div>
+</div>
+</div>
+
+<div class="row footer xauto">
+<div id=extras-area class1="top-left">
+<div id=extras class="vlabel">
+</div>
+</div>
+</div>
+
+
 </div>
 </body>
 </html>
@@ -103,32 +192,50 @@ Marker:<input class=tinyinput1 id="m-coords" value="0,0" type="search">
 
 function init(){
 var map;
-map=L.map('maph').setView([51.505, -0.09], 4);
+map=L.map('maph',{zoomControl:true,zoomSnap:0.25,zoomDelta:0.25}).setView([51.505, -0.09], 4);
 var st = localStorage.getItem("lastMarker");
 if(st){
-	_('m-coords').value = st
+_('m-coords').value = st
 }
 
 L.control.scale({updateWhenIdle:true,position:"bottomright"}).addTo(map)
-map.on("moveend",(e)=>{
 
-var currZoom=parseInt(map.getZoom());
-alrt("Zoom: "+ currZoom)
+map.on("moveend",(e)=>{
+var currZoom=map.getZoom();
+mapinfo("Zoom: "+ currZoom)
 map.quadZoom=currZoom;
 })
+
+_('btnCopyTN').onclick=()=>{copyText(_('m-number'))}
+_('btnCopyM').onclick=()=>{copyText(_('m-coords'))}
 
 _("btnSurround").onclick=()=>{
 let z=_('level').value;
 let perimeter=parseInt(_("perimeter").value);
 var st=_('m-coords').value;
-
 var point=st2point(st);
 if(point){
 localStorage.setItem("lastMarker",st);
-
 marker.setLatLng([point.lat,point.lng]).addTo(map);
-var bingo=DT.get(point.lat,point.lng,z)
+var bingo=DT.get(point.lat,point.lng,z);
+_("m-number").value=bingo.number;
 drawTiles(map,bingo.number,perimeter)
+}else{
+alrt("Non valid coordinates")
+}
+}
+
+_("btnOutline").onclick=()=>{
+let z=_('level').value;
+let perimeter=parseInt(_("perimeter").value);
+var st=_('m-coords').value;
+var point=st2point(st);
+if(point){
+localStorage.setItem("lastMarker",st);
+marker.setLatLng([point.lat,point.lng]).addTo(map);
+var bingo=DT.get(point.lat,point.lng,z);
+_("m-number").value=bingo.number;
+drawTiles(map,bingo.number,perimeter,true);//only outline
 }else{
 alrt("Non valid coordinates")
 }
@@ -143,54 +250,239 @@ var maxLevel=_("level").value;
 var bingo=DT.get(center.lat,center.lng,z)
 drawTiles(map,bingo.number,perimeter)
 }
+
+_("btnApplyGeo").onclick=()=>{
+//alrt('locating');
+
+var cb = function(obj){
+
+_('m-coords').value = obj.lat + "," + obj.lng;
+_("btnSurround").click()
+console.log(obj)
+}
+locate(cb);
+}
+
+
+_("btnApplyNumber").onclick=()=>{
+let perimeter=parseInt(_("perimeter").value);
+var tn =_("m-number").value;
+if(DT.validTN(tn)){
+drawTiles(map,tn,perimeter)
+}else{
+alrt("Tile number should have twice ditigs as its first digit plus 1")
+}
+}
+
+/*
+_("btnApplyJSON").onclick=()=>{
+let perimeter=parseInt(_("perimeter").value);
+var tn =_("m-number").value;
+if(DT.validTN(tn)){
+getJSON(tn)
+}else{
+alrt("Tile number should have twice ditigs as its first digit plus 1")
+}
+}
+*/
+
 _("btnClear").onclick=()=>clearMap();
 
 function addExtas(tn){
+var el = _("extras");
+el.innerHTML = '<span title="Download geoJSON">&dArr;Download:</span>';
+var tile=p2tile(tn);
 var gj=document.createElement("button");
-gj.innerHTML="Perimeter geoJSON";
-gj.classList.add("sbutton")
-_("extras").appendChild(gj)
+gj.innerHTML="Gried";
+gj.classList.add("sbutton");
+var tj=document.createElement("button");
+tj.innerHTML="Tile";
+tj.classList.add("sbutton");
+var oj=document.createElement("button");
+oj.innerHTML="Outline";
+oj.classList.add("sbutton");
+
+el.appendChild(tj)
+el.appendChild(gj)
+el.appendChild(oj)
+tj.onclick=()=>{
+getJSON(tile)
+}
+oj.onclick=()=>{
+outlineJSON(tn)
+}
+el.appendChild(gj)
 gj.onclick=()=>{
-console.log(tn)
 getJSON(tn)
 }
 }
 
 function clearMap(){
 _("extras").innerHTML="";
+map.closePopup();
 if(map.tiles10){
 map.tiles10.clearLayers();
 }
 }
 
-function drawTiles(map,tn,perimeter){
+function drawTiles(map,tn,perimeter,onlyOutline){
 clearMap();
 let precision=parseInt(_("precision").value);
 let z= parseInt(_("level").value);
-var bingo=DT.decode(tn)
+var bingo=DT.decode(tn);
+
+var pr=DT.perim(bingo.number,perimeter,6,true);
+var perim = pr.outline;
+
+//var bounds=plPerim.getBounds();
+//debugger;
+var bounds=perim.coords;
+setTimeout(()=>{
+map.fitBounds(bounds,{padding:[0,0]})},
+1000)
+if(onlyOutline){
+//map.zoomOut(1);
+}
+else{
+//map.zoomIn(0.5);
+}
+
+
+if(perim){
+var square = perim;
+var title=square.number;
+//if(square.type == "perimeter"){
+//console.log(square.coords)
+plPerim=L.polygon(square.coords,{color:"red",bubblingMouseEvents: false,opacity:0.7,weight:2,fillOpacity:0.01,dashArray:"2",title:square.number});
+//var bounds=plPerim.getBounds();
+//map.fitBounds(bounds,{padding:[-70,-70]})
+
+plPerim.on("click",(e)=>{
+pInfo(square.number)
+})
+if(onlyOutline){
+var mIcon = L.divIcon({
+className: 'vlabel1',
+html: '<div style="width:max-content; max-width:200px;" class="vlabel push-right">' + square.number +'</div>',
+iconSize1: [36,16],
+iconAnchor: [12,24]
+});
+//var title = ' x:'+square.x+' y:'+square.y + ' z:'+square.z;
+var m=L.marker(square.coords[3],{icon:mIcon,title:title}).addTo(map.tiles10);
+map.outlinePlace = square.coords[3];
+m.on("click",(e)=>{
+pInfo(square.number)	
+})
+
+plPerim.addTo(map.tiles10);
+//debugger;
+var qPopup = qInfo(bingo.number);
+pInfo(square.number);
+map.popupPlace=map.getCenter();
+//qPopup.setLatLng(map.popupPlace);
+
+//plPerim.on("click",(e)=>{alrt("dddfffff")})
+//bindTooltip(square.na)
+}
+}
+
+
+
+
+
+
+
+function pInfo(tl){
+//map.closePopup();
+if(!map.outlinePlace){
+map.outlinePlace=map.getCenter();
+}
+
+var det = "";
+var detP = pInfoDet(tl)
+var tn = p2tile(tl);
+det+=pInfoDet(tl);
+var popup = L.popup({autoClose:false,offset:[0,-30]}).setContent(det);
+popup.setLatLng(map.outlinePlace).openOn(map);
+
+//det+=qInfoDet(tn);
+//map.tiles10.bindPopup(det).openPopup();
+}
+
+function pInfoDet(tl){
+var perimeter = p2perim(tl);
+var det ="";
+var tile = p2tile(tl)
+var o = DT.outline(tile,perimeter,6);
+//console.log(o)
+
+var q = o.outline;
+/*
+o.forEach((sq)=>{
+	if(sq.type=="perimeter"){
+		q = sq;
+	}
+})
+*/
+//console.log(q)
+
+if(q){
+var corners="[[" + q.sw + "],[" + q.nw + "],[" + q.ne + "],[" + q.se+"]]";
+var width = getWidth(q.coords);
+if(width > 1000){
+width=width / 1000
+var miles=DT.nFormat(width  /  1.609343502101154,2)
+width=width + " km / "
+width+=miles + " miles"
+}else{
+width=width + " meters"
+}
+
+var det="<div class=sbutton>";
+det+="<b>Perimeter Outline</b>";
+det+="<br>";
+det+='<a class="sbutton" title="Copy tile number" onclick=copyText('+tl+')>'+tl+'</a>';
+det+='<a class="sbutton" title="Download geoJSON" onclick=getJSON('+tl+')>'+"&dArr;"+' geoJSON</a>';
+det+="<br>";
+det+="x:" + q.x + " y:" + q.y + " z:" + q.z;
+det+="<br>";
+det+="Width: ~" + width;
+det+="<br>";
+det+='<a class="sbutton" title="Copy corners array" onclick=copyText("'+ corners +'")>Corners (clockwise):</a>';
+det+="<br>";
+det+="<span class=push-right>";
+det+='SW: <a class="sbutton" title="Copy SW corner" onclick=copyText("'+ q.sw +'")>'+q.sw+'</a>';
+det+="<br>";
+det+='NW: <a class="sbutton" title="Copy NW corner" onclick=copyText("'+ q.nw +'")>'+q.nw+'</a>';
+det+="<br>";
+det+='NE: <a class="sbutton" title="Copy NW corner" onclick=copyText("'+ q.ne +'")>'+q.ne+'</a>';
+det+="<br>";
+det+='SE: <a class="sbutton" title="Copy NW corner" onclick=copyText("'+ q.se +'")>'+q.se+'</a>';
+det+="</span>";
+det+="</div>";
+}
+return det
+}
 
 function qInfo(tl){
+var det = qInfoDet(tl);
 map.closePopup();
+
+if(!map.popupPlace){
+map.popupPlace=map.getCenter();
+}
+var popup = L.popup({ autoClose:false,offset:[0,-30]}).setContent(det);
+popup.setLatLng(map.popupPlace).openOn(map);
+return popup;
+//map.tiles10.bindPopup(det).openPopup();
+}
+
+function qInfoDet(tl){
 let precision=parseInt(_("precision").value);
 var q=DT.decode(tl,precision);
 var coords=q.coords;
-var sLatSW=DT.nFormat(coords[0][0]);
-var sLngSW=DT.nFormat(coords[0][1]);
-var sLatNE=DT.nFormat(coords[2][0]);
-var sLngNE=DT.nFormat(coords[2][1]);
-var nw=DT.nFormat(coords[1][0])+","+DT.nFormat(coords[1][1]);
 var corners="[[" + q.sw + "],[" + q.nw + "],[" + q.ne + "],[" + q.se+"]]";
-var bounds=[[sLatNE,sLngNE],[sLatSW,sLngSW]]
-var rect=[[sLatNE,sLngNE],[sLatSW,sLngNE],[sLatSW,sLngSW],[sLatNE,sLngSW]];
-var center=L.latLngBounds(rect).getCenter();
-center.lat=DT.nFormat(center.lat);
-center.lng=DT.nFormat(center.lng);
-const rectangleBounds=L.latLngBounds(rect)
-const centerLat=rectangleBounds.getCenter().lat;
-const eastPoint=L.latLng(centerLat, rectangleBounds.getEast());
-const westPoint=L.latLng(centerLat, rectangleBounds.getWest());
-var width=eastPoint.distanceTo(westPoint)
-width=parseInt(width);
+var width = getWidth(q.coords);
 if(width > 1000){
 width=width / 1000
 var miles=DT.nFormat(width  /  1.609343502101154,2)
@@ -205,46 +497,49 @@ name=q.number;
 }
 var det="";
 det+='<div class=sbutton style="display:inline-block;margin:0;">';
-det+="<h4>Decimal Tile Info</h4>";
+det+="<b>Decimal Tile Info</b><br>";
 det+='<a class="sbutton" title="Copy tile number" onclick=copyText('+tl+')>'+tl+'</a>';
 det+='<a class="sbutton" title="Download geoJSON" onclick=getJSON('+tl+')>'+"&dArr;"+' geoJSON</a>';
-det+="<BR>";
+det+="<br>";
 det+="x:" + q.x + " y:" + q.y + " z:" + q.z;
-det+="<BR>";
-det+=" Width: " + width;
-det+="<BR>";
+det+="<br>";
+det+="Width: ~" + width;
+det+="<br>";
 det+='<a class="sbutton" title="Copy corners array" onclick=copyText("'+ corners +'")>Corners (clockwise):</a>';
-det+="<BR>";
+det+="<br>";
 det+="<span class=push-right>";
 det+='SW: <a class="sbutton" title="Copy SW corner" onclick=copyText("'+ q.sw +'")>'+q.sw+'</a>';
-det+="<BR>";
+det+="<br>";
 det+='NW: <a class="sbutton" title="Copy NW corner" onclick=copyText("'+ q.nw +'")>'+q.nw+'</a>';
-det+="<BR>";
+det+="<br>";
 det+='NE: <a class="sbutton" title="Copy NW corner" onclick=copyText("'+ q.ne +'")>'+q.ne+'</a>';
-det+="<BR>";
+det+="<br>";
 det+='SE: <a class="sbutton" title="Copy NW corner" onclick=copyText("'+ q.se +'")>'+q.se+'</a>';
 det+="</span>";
-det+="<BR>";
-det+="<BR>"
+det+="<br>";
+det+="<br>"
 det+="</div>"
-map.tiles10.bindPopup(det).openPopup();
-}
+return det
+}//qInfo
 
 if(bingo){
-var pl=L.polygon(bingo.coords,{color:"green",fillOpacity:0.04,title:"Device center"}).addTo(map.tiles10);
-var pr=DT.perim(bingo.number,perimeter,6,true);
-pr.forEach(function(square,i){
-if(square.type == "perimeter"){
-//console.log(square.coords)
-var plPerim=L.polygon(square.coords,{color:"red",opacity:0.7,weight:2,fillOpacity:0.01,dashArray:"2",title:title})
-var bounds=plPerim.getBounds();
-map.fitBounds(bounds,{padding:[-70,-70]})
-}
-if(square.type == "dtile"){
+plCenter=L.polygon(bingo.coords,{color:"green",bubblingMouseEvents: false,fillOpacity:0.04,title:"Device center"});
+plCenter.on("click",(e)=>{
+map.popupPlace = e.target._bounds.getCenter()
+qInfo(bingo.number)}
+
+);
+//.addTo(map.tiles10);
+
+
+var grid = pr.grid||[];
+grid.forEach(function(square,i){
+if(square.type == "dtile" && !(onlyOutline)){
 var title=square.number;//' x:'+square.x+' y:'+square.y + ' z:'+square.z;
-var pl=L.polygon(square.coords,{color:"purple",opacity:0.7,weight:2,fillOpacity:0.01,dashArray:"2"}).addTo(map.tiles10);
-pl.tl=square.number
-pl.on("click",()=>{
+var pl=L.polygon(square.coords,{color:"darkblue",bubblingMouseEvents: false,opacity:0.7,weight:2,fillOpacity:0.01,dashArray:"2"}).addTo(map.tiles10);
+pl.tl=square.number;
+pl.on("click",(e)=>{
+map.popupPlace = e.target._bounds.getCenter();
 qInfo(pl.tl)
 })
 
@@ -261,10 +556,20 @@ pl.bindTooltip(ttp);
 }
 })
 
-qInfo(tn);
+if(plCenter){
+plCenter.addTo(map.tiles10);
+map.popupPlace = plCenter.getCenter();
+}
+if(onlyOutline){
+}else{
+qInfo(bingo.number)
+}
+;
 addExtas(tn+"."+perimeter);
+_('m-number').value=tn;
 }
-}
+alrt("Showing " + tn+ "<br>"+ "Click a tile to show its metadata");
+}//drawTiles
 
 var marker=L.marker(0,0)
 map.on("click",(e)=>{
@@ -310,7 +615,8 @@ pl.addTo(tiles10);
 }//init end
 
 
-//helpers start
+//***** helpers start
+
 function st2point(st){
 var o
 var arr=st.trim().split(',');
@@ -324,14 +630,33 @@ o={lat:arr[0],lng:arr[1]}
 return o
 }
 
+function p2tile(l){
+var r=l+"";
+var pair=r.split(".");
+if(pair[0]){
+r=pair[0];
+}
+return r
+}
+
+function p2perim(l){
+var r=l+"";
+var ret;
+var pair=r.split(".");
+if(pair.length>1){
+ret=Number(pair[1]);
+}
+return ret
+}
+
 function _(d){return document.getElementById(d)}
+
 function getJSON(tl){
-debugger;
 var q=DT.decode(tl)
 var dname;
 if(q.p){
-j=DT.perimJSON(tl,q.p);
-dname=tl.replace(".","_")  +".json"
+j=DT.perimJSON(p2tile(tl),q.p);
+dname=(""+tl).replace(".","_")  +".json"
 }
 else{
 dname=tl +".json"
@@ -344,27 +669,110 @@ a.href=URL.createObjectURL(j);
 a.click();
 }
 
+function outlineJSON(tl){
+var q=DT.decode(tl)
+var dname;
+if(q.p){
+j=DT.outlineJSON(p2tile(tl),q.p);
+dname=(""+tl).replace(".","_")  + "_outline"  + ".json"
+let a=document.createElement("a")
+a.download=dname;
+j=new Blob([j], {type: "text/plain"});
+a.href=URL.createObjectURL(j);
+a.click();
+}
+}
+
 function alrt(text){
 _('message-text').innerHTML=text;
 _('message-area').classList.remove('hidden');
 setTimeout(()=>{
 _('message-text').innerHTML="";
 _('message-area').classList.add('hidden');
-},4000);
+},6000);
 }
 
-function copyText(text){
+function mapinfo(text){
+_('info-text').innerHTML=text;
+_('info-area').classList.remove('hidden');
+setTimeout(()=>{
+_('info-text').innerHTML="";
+_('info-area').classList.add('hidden');
+},6000);
+}
+
+function copyText(txt){
+var text = txt;
+if(txt instanceof HTMLElement){
+text = txt.value;
+}
 navigator.clipboard.writeText(text)
 .then(() => {
 console.log(text);
-alrt(text+"<BR>copied!")
+alrt(text+"<br>copied!")
 })
 .catch(err => {
 console.error("Failed to copy text: ", err);
 });
 }
-//helpers end
+
+function locate(cb){
+if (navigator.geolocation) {
+navigator.geolocation.getCurrentPosition((position)=>{showPosition(position,cb)}, showError);
+} else {
+alrt("Geolocation is not supported by this browser.");
+}
+}
+function showPosition(position,cb) {
+const lat = position.coords.latitude;
+const lng = position.coords.longitude;
+if(cb){
+cb({lat:lat,lng:lng})
+}else{
+console.log(`Latitude: ${lat}, Longitude: ${llng}`);  
+}
+}
+function showError(error) {
+switch (error.code) {
+case error.PERMISSION_DENIED:
+alrt("User denied the request for Geolocation.");
+break;
+case error.POSITION_UNAVAILABLE:
+alrt("Location information is unavailable.");
+break;
+case error.TIMEOUT:
+alrt("The request to get user location timed out.");
+break;
+case error.UNKNOWN_ERROR:
+alrt("An unknown error occurred.");
+break;
+}
+}
+
+function getWidth(coords){
+var width;
+var sLatSW=DT.nFormat(coords[0][0]);
+var sLngSW=DT.nFormat(coords[0][1]);
+var sLatNE=DT.nFormat(coords[2][0]);
+var sLngNE=DT.nFormat(coords[2][1]);
+var nw=DT.nFormat(coords[1][0])+","+DT.nFormat(coords[1][1]);
+//var corners="[[" + q.sw + "],[" + q.nw + "],[" + q.ne + "],[" + q.se+"]]";
+var bounds=[[sLatNE,sLngNE],[sLatSW,sLngSW]]
+var rect=[[sLatNE,sLngNE],[sLatSW,sLngNE],[sLatSW,sLngSW],[sLatNE,sLngSW]];
+var center=L.latLngBounds(rect).getCenter();
+center.lat=DT.nFormat(center.lat);
+center.lng=DT.nFormat(center.lng);
+const rectangleBounds=L.latLngBounds(rect)
+const centerLat=rectangleBounds.getCenter().lat;
+const eastPoint=L.latLng(centerLat, rectangleBounds.getEast());
+const westPoint=L.latLng(centerLat, rectangleBounds.getWest());
+width=eastPoint.distanceTo(westPoint)
+width=parseInt(width);
+return width;
+}
+
+//***** helpers end
 
 init();
-
+alrt('Click on a map to show a tile');
 </script>
