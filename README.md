@@ -34,7 +34,7 @@ console.log(tile.coords);
 <br>
 
 
-[About](explainer/about.md)
+[About](explainer/benefits.md)
 
 <br>
 
