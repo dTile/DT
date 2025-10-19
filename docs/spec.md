@@ -55,16 +55,17 @@ Hitch is the opposing end of the anchor, namely the farthest vertex opposing the
 
 #### Tile notation G, X, Y
 A tile is denoted by number that is represented by concatenating G (granularity - geen), X for horizontal distance (red), Y vertical distance (blue). X and Y are padded with zeros that fill up the gap needed to achieve G digits.
-A tile X coordinate in a specific granularity level represents the number of tiles that fill up the distance to the antimeridian which is defined as [90,-180,-90,-180]
+A tile X coordinate in a specific granularity level represents the number of tiles that fill up the distance to the antimeridian which is defined as [90,-180,-90,-180].
+
 ![2D tile](https://dtile.github.io/DT/media/2dtile.png?raw=true)
 
 
 #### Cube notation G, X, Y, E
-A cube is denoted by number that is represented by concatenating G (granularity) , X  for horizontal distance, Y vertical horizontal distance and E for elevation distance in cubes from the surface of the earth. X and Y are padded with zeros that fill up the gap needed to achieve G digits. There is no need to pad elevation since the elevation number starts at the (G x 2 + 2) digit position.
+A cube is denoted by number that is represented by concatenating G (granularity) , X  for horizontal distance, Y vertical distance and E for elevation distance in cubes from the surface of the earth. X and Y are padded with zeros that fill up the gap needed to achieve G digits. There is no need to pad elevation since the elevation number starts at the (G x 2 + 2) digit position.
 
 #### Bbox or extended cube
-An extended cube is represnted by a cube number followed by a decimal number represented by X2,Y2,E2 and F. 
-F represents the final guiding digit which solves the problem of unumbiguity of traling zeros. It defines how many digits compose X2 and Y2
+An extended cube is represented by a cube number followed by a decimal number represented by X2,Y2,E2 and F. 
+F represents the final guiding digit which solves the problem of unumbiguity of traling zeros. It defines how many digits compose X2 and Y2.
 X2 denotes the disance eastwards in cubes from the anchor.
 Y2 denotes the disance northwards in cubes from the anchor.
 E2 denotes the elvated disance in cubes from the anchor.
@@ -74,7 +75,7 @@ The G and F guide digits delimit the bbox number at the edges.
 
 
 ### Hatching or Bboxing
-Hatching of Bboxing is an operation of extending a basic tile of cube by adding the corressponding digits at the decimal part of the tile/cube number after the dot. A guided final digit is added at the end of the decimal part to avoid the effect vanishing traling zeros and to indicate how many digits are needed for expanding a cube or tile in each dimension as rtelated to the anchor. Figuratively. bboxin a cube is a process of inflating to the northeast end by gluing (or replicating) X2 cubes to the east, Y2 cubes to the north and E2 to the sky creating a new box (which is composed by basic simiar cubes glued together). Hatching is done by adding a corresponding number (Hitch number) as a decimal part of a cube/tile. Hitching saves coding of big numbers of adjacent cubes that are contained in a box by the use of only one number that uses the anchor number as its cube part and the hitch number as its opposing vertex.
+Hatching of Bboxing is an operation of extending a basic tile of cube by adding the corressponding digits at the decimal part of the tile/cube number after the dot. A guiding final digit (F) is added at the end of the decimal part to avoid the effect vanishing traling zeros and to indicate how many digits are needed for expanding a cube or tile in each dimension as rtelated to the anchor. Figuratively. bboxing a cube is a process of inflating it to the northeast end by gluing (or replicating) X2 cubes to the east, Y2 cubes to the north and E2 to the sky creating a new bigger box (which is composed by basic similar cubes glued together). Hatching is done by adding a corresponding number ("Hitch" number) as a decimal part of a cube/tile. Hatching saves coding of big numbers of adjacent cubes that are contained in a box by the use of only one number and reusing an anchor number as its cube part and addting hitch number that represents an opposing vertex to the anchor.
 
 
 
