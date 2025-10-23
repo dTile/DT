@@ -1,10 +1,10 @@
-# Decimal Tile System (DTS)
+# Decimal Tile Notation (DTN)
 
 ## Goal
-Enabling an interchageable and short notation of map tiles on 2D maps or cubes on 3D simplified maps using only decimal numbers instead of the use of commas, brackes or vectors that represent degrees, minutes and seconds. This method enables a mathematical representation of a set cubes that may be used on virtual 3D printer for printing a model of a spatial area such as a city block, a room or a mountain. The process of 3D printing requires a preliminar definition of the positions of "raw material cubes" that are supposed to be glued on each layer starting with elevation 0 and doing the same at more eleavated surfaces.
+Enabling an superimposing grids n maps using short notation of tiles on 2D maps or cubes on 3D simplified maps using only decimal numbers instead of the use of commas, brackes or vectors that represent degrees, minutes and seconds. This method enables a mathematical representation of a set cubes that may be used on virtual 3D printer for printing a model of a spatial area such as a city block, a room or a mountain. The process of 3D printing requires a preliminar definition of the positions of "raw material cubes" that are supposed to be glued on each layer starting with elevation 0 and doing the same at more eleavated surfaces.
 
 ## Motivation
-A simple use of numbers that may represent areas for fast and coherent reference for the use of Real Estate agencies, gaming applications, nature disaster repsonse teams that need to set up evacuation areas and so on.
+A simple use of numbers that may represent areas for fast and coherent reference for the use of Real Estate agencies, gaming applications, nature disaster repsonse teams, evacuation area assignment, traffice management and so on.
 
 ## Assumptions
 The algorigthms use a simplified Mercator projection mapping model and the "bbox" notation concept. This concept assumes that the ground zero of a cube or box is the southwestern and deepest point which is located within its space boundaries. That concept requires a second set of numbers that represent the opposing corner or verix. Thus any, cube or box space that is parallel to the surface of the earth can be represented by an array of 6 coordinats.
@@ -36,7 +36,7 @@ Decimal dergree triage that denotes a point on a 3D map by concatenating the lat
 A map tile is 4 corner polygon that has 4 DD coordinates that confine its area. A tile looks like a perfect square on a Mercator project map although in reaiity it is a trapezoid due to the curvature of the earth.
 
 #### Cube
-A cube is a vector that has 8 DD3C units that confine its space on a 3D map havin an elevation notation that represnts how far the cube is located from the surface of the earth, be it elevated or deepen.
+A cube is a vector that has 8 DD3C units that confine its space on a 3D map.
 
 #### 2D Root Map
 The area that covers all places on earth on a Mercator projected map [[90,-180],[90,180],[-90,180],[-90,-180]].
@@ -48,11 +48,14 @@ The number of tiles that fill up 2D root map horizontally or vertically which is
 #### Tile notation G, X, Y
 A tile is denoted by number by concatenating G (granularity - geen), X for horizontal distance (red) from the anti-meridian, Y vertical distance (blue) from the north pole. X and Y are padded with zeros that fill up the gap needed to achieve G digits. A tile X coordinate in a specific granularity level represents the number of tiles that fill up the distance of the specific tile to the antimeridian which is loacted at [90,-180,-90,-180].  A coordinates of the polygon that bounds a tile can be extracted by an API function that takes G, X and Y as paramters and vice versa.
 
+#### Cube notation G, X, Y, E
+A cube is denoted by number by concatenating G (granularity), X for horizontal distance from the anti-meridian, Y vertical distance from the north pole and E elevation distance from the sea level. X and Y are padded with zeros that fill up the gap needed to achieve G digits. The elevation parameter of a cube denotes how far the cube is located (in cube units) from the surface of the earth, be it elevated or sunken (negative).
+
 #### TBOX - Tile Box
 Bounding recangle that outlines the bounds of all tiles that are between an anchor tile northwest corner and an pposing tile's southeast corner (hinch). A tilebox can be defined by one number that includes the tile number anchor at the interger part of a number and the distances in tiles to the oposing (hinch) tile at the decimal part of that number.
 
 #### CBOX - Cube Box
-Bounding box represent a box that contains all cubes situated between the northwest deppest cube corner and an opposing cube (hinch) south-east most eleveted conrer.
+Bounding box represents a 3D area that contains all cubes situated between the northwest deppest cube (anfhor) corner and an opposing cube (hinch) south-east most eleveted conrer.
 
 #### 3D Root Map
 A pseudo 3D bbox that covers all places on the sea level on earth on a Mercator projected map [-90,-180,0,90,180,0]
@@ -70,10 +73,10 @@ The reference corner that denominates the ground zero point that image tile prov
 The antipode of Frozen Island  [-90,-180,0]
 
 #### Anchor
-An anchor represents the starting reference vertex of a cube or corner of a tile on a map. It has the south western deepest point defined by X which is the number of tiles/cubes needed to fill the gap from the antimeridian and Y denoting the number of distance units from the north pole. The width of a tile or a cube is calculated by dividing the circumference on a spedific longitude by the tile factor. An anchor of a cube has an elevation denominator.
+An anchor represents the starting reference vertex of a cube or corner of a tile on a map. It has the north western deepest point defined by X which is the number of tiles/cubes needed to fill the gap from the antimeridian and Y denoting the number of distance units from the north pole. The width of a tile or a cube is calculated by dividing the circumference on a spedific longitude by the tile factor. An anchor of a cube has an elevation denominator.
 
 #### Hitch or Projection
-Hitch is the opposing end of the anchor, namely the farthest vertex opposing the anchor of a cube or a corner opposing the anchor of a tile. A projection is not necessary in a cube notation since it can be retrieved by a function that takes the granularity as a parameter. But, it is necesary to create a defition of a bbox which contains several cubes or tiles.
+Hitch is the opposing end of the anchor, namely the farthest vertex opposing the anchor of a cube or a corner opposing the anchor of a tile. A hitch is not necessary in a cube notation since it can be retrieved by a function that takes the granularity as a parameter. But, it is necesary to create a defition of a bbox which contains several cubes or tiles.
 
 ![2D tile](https://dtile.github.io/DT/media/2dtile.png?raw=true)
 
