@@ -27,10 +27,10 @@ The maximum number of tiles is 100 power of G. A tile on granularity 7 on the eq
 ### Preliminary Definitions
 
 #### 2D BBOX - Tile Box
-Bounding tile that represents a polygon bounds that are contained in an an area defined by an array of 4 numbers made up of coordinates: south,west,north and east in this specific order.
+Bounding tile that represents a polygon bounds that are contained in an an area defined by an array of 4 numbers made up of coordinates: south,west,north and east in this specific order. A tilebox can be defined by a one number that include the tile number anchor and the distances in tiles to the opising (hinch) tile.
 
 #### 3D BBOX - Cube Box
-Bounding box representing a box shape with bounds that are contained in an space defined by an array of 4 numbers made up by: south,west,depth,north,east and elevation in this specific order.
+Bounding box representing a box shape with bounds that are contained in an space defined by an array of 6 numbers made up by: south,west,depth,north,east and elevation in this specific order.
 
 #### 2D Root Map
 The area that covers all places on earth on a Mercator projected map [-90,-180,90,180] in the North-Easting Notation or [-180,-90,180,90] in geoJSON notation where longitude preceeds latitude. 
