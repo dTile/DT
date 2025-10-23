@@ -1,29 +1,21 @@
 # Decimal Tile Notation (DTN)
 
 ## Goal
-Shorthand mathematical represenation of dynamic grids that cen be superimposed on maps. DTN uses aggregate short notation of tiles using only decimal numbers instead of the use of commas, brackes, arrays or vectors that represent degrees, minutes and seconds. This notation is extended to cubes and boxes by adding an elevation parameter. Thus, a mathematical representation of a set cubes may be used on virtual 3D printer for printing a model of a spatial area such as a city block, a room or a mountain. 
+Shorthand mathematical represenation of dynamic grids that used for a fast and coherent gridding and bounding of maps. DTN uses aggregate short notation of tiles using only decimal numbers instead of the use of commas, brackes, arrays or vectors that represent degrees, minutes and seconds. This notation is extended to cubes and boxes by adding an elevation parameter. Thus, a mathematical representation of a set cubes may be used on virtual 3D printer for printing a model of a spatial area such as a city block, a room or a mountain. 
 
 ## Motivation
 A simple use of numbers that may represent areas for fast and coherent reference for the use of Real Estate agencies, gaming applications, nature disaster repsonse teams, evacuation area assignment, traffic management, navigation, news alerts, weather forcasts and so on.
 
-## Applications
+## Application
 The process of 3D printing (visual of physical) requires a preliminar definition of the positions of "raw material cubes" within a predifined bounding box. The cubes are mapped in a way that assigns their location and how they shuld be arranged or glued to each layer starting at the most sunken level and iterating the process at the next elevation levels.
 
 ## Assumptions
-The algorigthms use a simplified Mercator projection mapping model and the "bbox" notation concept. This concept assumes that the ground zero of a cube or box is the southwestern and deepest point which is located within its space boundaries. That concept requires a second set of numbers that represent the opposing corner or verix. Thus any, cube or box space that is parallel to the surface of the earth can be represented by an array of 6 coordinats. DTN as opposed to geoJSON spec assings the anchor to the northwestern corner becasue tile map providers start there in order to avoid the need of using negative numbers.
-> [!NOTE]
-In a simpsitic way one can define a tile as a cube with an ommited height as can be inferred from the [BBOX spec](https://stevage.github.io/geojson-spec/#section-5). "The value of a bbox vector must be an array of length 2*n where n is the number of dimensions with all axes of the most southwesterly and deepest point followed by all axes of the more northeasterly and elevated point".
+The algorigthms use a simplified Mercator projection mapping model and the "bbox" notation concept. This concept assumes that the ground zero of a cube or box is the southwestern and deepest point which is located within its space boundaries. That concept requires a second set of numbers that represent the opposing corner or vertix. Thus, any cube or cbox that is parallel to the surface of the earth can be represented by an array of 6 coordinats. DTN as opposed to geoJSON spec assings the anchor to the northwestern corner because tile map providers start their image tiles in the northwestern corner of the map in order to avoid the need of using negative numbers.
 
-### DTS Notation
-A cube or a tile is represented by a decimal number where the first digit represents it granualarity (G). G sets up the ammount of possible values that fill the root map horiaozntally and vertically (Tile facto 10**G). The the next set of G digits (padded by zeros) reprsent the horizontal distance of tiles from the anti-meridian and the following G digits represent the numbers of tiles distance to the north pole. the next digis represent how many tiles are needed to reach the elevation from the surface of earth. A negative cube number represents a cube with negative elevation. A DTS notation has a guiding start digit (G) notation and a finalizing (F) digit notation which overcome the ambiguity of leading and trailing zeros in decimal numbers.
+### DTN Notation
+A cube or a tile is represented by a decimal number where the first digit represents it granualarity (G). G sets up the ammount of possible values that fill the root map horiaozntally and vertically (Tile facto 10**G). The the next set of G digits (padded by zeros) reprsent the horizontal distance of tiles from the anti-meridian and the following G digits (Y) represent the numbers of tiles distance to the north pole. the next digis represent how many tiles are needed to reach the elevation from the surface of earth. A negative cube number represents a cube with negative elevation. A DTS notation has a guiding start digit (G) notation and a finalizing (F) digit notation which overcome the ambiguity of leading and trailing zeros in decimal numbers.
 > [!NOTE]
 For simplicity, the notation of a coordinate uses brackets that enclose coordinates using [North-Easting UTM](https://gisgeography.com/easting-northing-coordinates/) notation model.
-
-### Granularity
-The granularity (G) number represents how many times the algorithm splits the 2D root map into 10x10 tiles.
-On granulariy 1 there are 100 tiles (10x10), on level 2 10,000 tiles and so on. 
-The maximum number of tiles is 100 power of G. A tile on granularity 7 on the equator has an estimated width of 4 meters. A tile on granularity level 8 has about 40 cm width and so on. Basically, there are very few applications that would need granulartiy 10 where the maximum width of a tile is about 4 mm.
-
 
 <HR>
 
@@ -48,11 +40,19 @@ or a bbox [-180,-90,180,90] in geoJSON notation where longitude preceeds latitud
 #### Tile factor
 The number of tiles that fill up 2D root map horizontally or vertically which is calculated by powering 10 by G (Granularity).
 
+#### Granularity
+The granularity (G) number represents how many times the algorithm splits the 2D root map into 10x10 tiles.
+On granulariy 1 there are 100 tiles (10x10), on level 2 10,000 tiles and so on. 
+The maximum number of tiles is 100 power of G. A tile on granularity 7 on the equator has an estimated width of 4 meters. A tile on granularity level 8 has about 40 cm width and so on. Basically, there are very few applications that would need granulartiy 10 where the maximum width of a tile is about 4 mm.
+
 #### Tile notation G, X, Y
 A tile is denoted by number by concatenating G (granularity - geen), X for horizontal distance (red) from the anti-meridian, Y vertical distance (blue) from the north pole. X and Y are padded with zeros that fill up the gap needed to achieve G digits. A tile X coordinate in a specific granularity level represents the number of tiles that fill up the distance of the specific tile to the antimeridian which is loacted at [90,-180,-90,-180].  A coordinates of the polygon that bounds a tile can be extracted by an API function that takes G, X and Y as paramters and vice versa.
 
 #### Cube notation G, X, Y, E
 A cube is denoted by number by concatenating G (granularity), X for horizontal distance from the anti-meridian, Y vertical distance from the north pole and E elevation distance from the sea level. X and Y are padded with zeros that fill up the gap needed to achieve G digits. The elevation parameter of a cube denotes how far the cube is located (in cube units) from the surface of the earth, be it elevated or sunken (negative).
+
+> [!NOTE]
+In a simpsitic way one can define a tile as a cube with an ommited height as can be inferred from the [BBOX spec](https://stevage.github.io/geojson-spec/#section-5). "The value of a bbox vector must be an array of length 2*n where n is the number of dimensions with all axes of the most southwesterly and deepest point followed by all axes of the more northeasterly and elevated point".
 
 #### TBOX - Tile Box
 Bounding recangle that outlines the bounds of all tiles that are between an anchor tile northwest corner and an pposing tile's southeast corner (hinch). A tilebox can be defined by one number that includes the tile number anchor at the interger part of a number and the distances in tiles to the oposing (hinch) tile at the decimal part of that number.
@@ -61,7 +61,7 @@ Bounding recangle that outlines the bounds of all tiles that are between an anch
 Bounding box represents a 3D area that contains all cubes situated between the northwest deppest cube (anfhor) corner and an opposing cube (hinch) south-east most eleveted conrer.
 
 #### 3D Root Map
-A pseudo 3D bbox that covers all places on the sea level on earth on a Mercator projected map [-90,-180,0,90,180,0]
+A pseudo 3D bbox that covers all places on the sea level on earth on a Mercator projected map [-90,-180,0,90,180,0
 
 #### Null Island
 The point where the prime meridian meets the equator [0,0,0].
