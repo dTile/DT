@@ -26,8 +26,26 @@ The maximum number of tiles is 100 power of G. A tile on granularity 7 on the eq
 
 ### Preliminary Definitions
 
+#### DD coordinates
+Decimal dergree pairs that denote a point of a map by concatenating the latitude a comma and the longitue.
+
+#### 3D DD coordinates
+Decimal dergree triage that denotes a point on a 3D map by concatenating the latitude a comma, the longitude a comma and altitude.
+
+#### Tile
+A map tile is 4 corner polygon that has 4 DD coordinates that confine its area. A tile looks like a perfect square on a Mercator project map although but in reaiity it is a trapezoid due to the curvature of the earth.
+
+#### Cube
+A map cube is a 8 corner vector that has 8 decimal 3D DD coordinates that confine its space in a 3D model.
+
+#### Tile factor
+The number of tiles that fill up 2D root map horizontally or vertically which is calculated by powering 10 by G (Granularity).
+
+#### Tile notation G, X, Y
+A tile is denoted by number that is represented by concatenating G (granularity - geen), X for horizontal distance (red) from the anti-meridian, Y vertical distance (blue) from the north pole. X and Y are padded with zeros that fill up the gap needed to achieve G digits. A tile X coordinate in a specific granularity level represents the number of tiles that fill up the distance to the antimeridian which is defined as [90,-180,-90,-180].
+
 #### 2D BBOX - Tile Box
-Bounding tile that represents a polygon bounds that are contained in an an area defined by an array of 4 numbers made up of coordinates: south,west,north and east in this specific order. A tilebox can be defined by a one number that include the tile number anchor and the distances in tiles to the opising (hinch) tile.
+Bounding recangle that outlines the bounds of tiles as defined by an array of 4 numbers made up of coordinates: south,west,north and east in this specific order. A tilebox can be defined by a one number that include the tile number anchor and the distances in tiles to the opising (hinch) tile.
 
 #### 3D BBOX - Cube Box
 Bounding box representing a box shape with bounds that are contained in an space defined by an array of 6 numbers made up by: south,west,depth,north,east and elevation in this specific order.
@@ -50,21 +68,13 @@ The reference corner that denominates the ground zero point that image tile prov
 #### Penguin Island
 The antipode of Frozen Island  [-90,-180,0]
 
-#### Tile factor
-The number of tiles that fill up 2D root map horizontally or vertically which is calculated by powering 10 by G (Granularity).
-
 #### Anchor
 An anchor represents the starting reference vertex of a cube or corner of a tile on a map. It has the south western deepest point defined by X which is the number of tiles/cubes needed to fill the gap from the antimeridian and Y denoting the number of distance units from the north pole. The width of a tile or a cube is calculated by dividing the circumference on a spedific longitude by the tile factor. An anchor of a cube has an elevation denominator.
 
 #### Hitch or Projection
 Hitch is the opposing end of the anchor, namely the farthest vertex opposing the anchor of a cube or a corner opposing the anchor of a tile. A projection is not necessary in a cube notation since it can be retrieved by a function that takes the granularity as a parameter. But, it is necesary to create a defition of a bbox which contains several cubes or tiles.
 
-#### Tile notation G, X, Y
-A tile is denoted by number that is represented by concatenating G (granularity - geen), X for horizontal distance (red), Y vertical distance (blue). X and Y are padded with zeros that fill up the gap needed to achieve G digits.
-A tile X coordinate in a specific granularity level represents the number of tiles that fill up the distance to the antimeridian which is defined as [90,-180,-90,-180].
-
 ![2D tile](https://dtile.github.io/DT/media/2dtile.png?raw=true)
-
 
 #### Cube notation G, X, Y, E
 A cube is denoted by number that is represented by concatenating G (granularity) , X  for horizontal distance, Y vertical distance and E for elevation distance in cubes from the surface of the earth. X and Y are padded with zeros that fill up the gap needed to achieve G digits. There is no need to pad elevation since the elevation number starts at the (G x 2 + 2) digit position.
