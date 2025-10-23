@@ -26,32 +26,33 @@ The maximum number of tiles is 100 power of G. A tile on granularity 7 on the eq
 
 ### Preliminary Definitions
 
-#### DD coordinates
-Decimal dergree pairs that denote a point of a map by concatenating the latitude a comma and the longitue.
+#### Decimal Degree Coordinate - DDC
+Decimal dergree pairs that denote a point on a 2D map by concatenating the latitude a comma and the longitude and bracketing that string.
 
-#### 3D DD coordinates
-Decimal dergree triage that denotes a point on a 3D map by concatenating the latitude a comma, the longitude a comma and altitude.
+#### Decimal Degree 3D Coordinate - DD3C
+Decimal dergree triage that denotes a point on a 3D map by concatenating the latitude a comma, the longitude a comma and altitude and bracketing that string.
 
 #### Tile
-A map tile is 4 corner polygon that has 4 DD coordinates that confine its area. A tile looks like a perfect square on a Mercator project map although but in reaiity it is a trapezoid due to the curvature of the earth.
+A map tile is 4 corner polygon that has 4 DD coordinates that confine its area. A tile looks like a perfect square on a Mercator project map although in reaiity it is a trapezoid due to the curvature of the earth.
 
 #### Cube
-A map cube is a 8 corner vector that has 8 decimal 3D DD coordinates that confine its space in a 3D model.
+A cube is a vector that has 8 DD3C units that confine its space on a 3D map havin an elevation notation that represnts how far the cube is located from the surface of the earth, be it elevated or deepen.
+
+#### 2D Root Map
+The area that covers all places on earth on a Mercator projected map [[90,-180],[90,180],[-90,180],[-90,-180]].
+or a bbox [-180,-90,180,90] in geoJSON notation where longitude preceeds latitude. 
 
 #### Tile factor
 The number of tiles that fill up 2D root map horizontally or vertically which is calculated by powering 10 by G (Granularity).
 
 #### Tile notation G, X, Y
-A tile is denoted by number that is represented by concatenating G (granularity - geen), X for horizontal distance (red) from the anti-meridian, Y vertical distance (blue) from the north pole. X and Y are padded with zeros that fill up the gap needed to achieve G digits. A tile X coordinate in a specific granularity level represents the number of tiles that fill up the distance to the antimeridian which is defined as [90,-180,-90,-180].
+A tile is denoted by number by concatenating G (granularity - geen), X for horizontal distance (red) from the anti-meridian, Y vertical distance (blue) from the north pole. X and Y are padded with zeros that fill up the gap needed to achieve G digits. A tile X coordinate in a specific granularity level represents the number of tiles that fill up the distance of the specific tile to the antimeridian which is loacted at [90,-180,-90,-180].  A coordinates of the polygon that bounds a tile can be extracted by an API function that takes G, X and Y as paramters and vice versa.
 
-#### 2D BBOX - Tile Box
-Bounding recangle that outlines the bounds of tiles as defined by an array of 4 numbers made up of coordinates: south,west,north and east in this specific order. A tilebox can be defined by a one number that include the tile number anchor and the distances in tiles to the opising (hinch) tile.
+#### TBOX - Tile Box
+Bounding recangle that outlines the bounds of all tiles that are between an anchor tile northwest corner and an pposing tile's southeast corner (hinch). A tilebox can be defined by one number that includes the tile number anchor at the interger part of a number and the distances in tiles to the oposing (hinch) tile at the decimal part of that number.
 
-#### 3D BBOX - Cube Box
-Bounding box representing a box shape with bounds that are contained in an space defined by an array of 6 numbers made up by: south,west,depth,north,east and elevation in this specific order.
-
-#### 2D Root Map
-The area that covers all places on earth on a Mercator projected map [-90,-180,90,180] in the North-Easting Notation or [-180,-90,180,90] in geoJSON notation where longitude preceeds latitude. 
+#### CBOX - Cube Box
+Bounding box represent a box that contains all cubes situated between the northwest deppest cube corner and an opposing cube (hinch) south-east most eleveted conrer.
 
 #### 3D Root Map
 A pseudo 3D bbox that covers all places on the sea level on earth on a Mercator projected map [-90,-180,0,90,180,0]
