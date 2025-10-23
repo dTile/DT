@@ -26,10 +26,10 @@ The maximum number of tiles is 100 power of G. A tile on granularity 7 on the eq
 
 ### Preliminary Definitions
 
-#### 2D BBOX
+#### 2D BBOX - Tile Box
 Bounding tile that represents a polygon bounds that are contained in an an area defined by an array of 4 numbers made up of coordinates: south,west,north and east in this specific order.
 
-#### 3D BBOX
+#### 3D BBOX - Cube Box
 Bounding box representing a box shape with bounds that are contained in an space defined by an array of 4 numbers made up by: south,west,depth,north,east and elevation in this specific order.
 
 #### 2D Root Map
@@ -41,8 +41,14 @@ A pseudo 3D bbox that covers all places on the sea level on earth on a Mercator 
 #### Null Island
 The point where the prime meridian meets the equator [0,0,0].
 
+#### Anti Null Island
+The point where the anti-meridian meets the equator [0,0,0].
+
 #### Frozen Island
-The reference corner represents the ground zero point that image tile providers relate to as a starting point, being [-90,-180,0] in the North-Eastern notation model which is a starting refence point of their x and y parameters.
+The reference corner that denominates the ground zero point that image tile providers relate to as a starting point, being [90,-180,0] in the North-Eastern notation model which is a starting refence point of their x and y parameters.
+
+#### Penguin Island
+The antipode of Frozen Island  [-90,-180,0]
 
 #### Tile factor
 The number of tiles that fill up 2D root map horizontally or vertically which is calculated by powering 10 by G (Granularity).
