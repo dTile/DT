@@ -1,10 +1,10 @@
 # Decimal Tile Notation (DTN)
 
 ## Goal
-Shorthand mathematical represenation of dynamic grids that used for a fast and coherent gridding and bounding of maps. DTN uses aggregate short notation of tiles using only decimal numbers instead of the use of commas, brackes, arrays or vectors that represent degrees, minutes and seconds. This notation is extended to cubes and boxes by adding an elevation parameter. Thus, a mathematical representation of a set cubes may be used on virtual 3D printer for printing a model of a spatial area such as a city block, a room or a mountain. 
+Shorthand mathematical represenation of perimeters that used for a fast and coherent gridding and bounding of maps. DTN uses aggregate short notation of tiles using only decimal numbers instead of the use of commas, brackes, arrays or vectors that represent degrees, minutes and seconds. This notation is extended to cubes and boxes by adding an elevation parameter. Thus, a mathematical representation of a set cubes may be used on virtual 3D printer for printing a model of a spatial area such as a city block, a room or a mountain. 
 
 ## Motivation
-A simple use of numbers that may represent areas for fast and coherent reference for the use of Real Estate agencies, gaming applications, nature disaster repsonse teams, evacuation area assignment, traffic management, navigation, news alerts, weather forcasts and so on.
+A simple use of numbers that may represent areas for fast and coherent reference for the use of Real Estate agencies, gaming applications, nature disaster repsonse teams, evacuation area assignment, traffic management, architecture, navigation, news alerts, weather forcasts and so on.
 
 ## Application
 The process of 3D printing (visual of physical) requires a preliminar definition of the positions of "raw material cubes" within a predifined bounding box. The cubes are mapped in a way that assigns their location and how they shuld be arranged or glued to each layer starting at the most sunken level and iterating the process at the next elevation levels.
@@ -21,14 +21,14 @@ For simplicity, the notation of a coordinate uses brackets that enclose coordina
 
 ### Preliminary Definitions
 
-#### Decimal Degree Coordinate - DDC
-Decimal dergree pairs that denote a point on a 2D map by concatenating the latitude a comma and the longitude and bracketing that string.
+#### Decimal Degree Coordinate - DD
+Decimal dergree string that denotes a point on a 2D map by concatenating the latitude a comma and the longitude.
 
-#### Decimal Degree 3D Coordinate - DD3C
-Decimal dergree triage that denotes a point on a 3D map by concatenating the latitude a comma, the longitude a comma and altitude and bracketing that string.
+#### Decimal Degree 3D Coordinate - DD3
+Decimal dergree string that denotes a point on a 3D map by concatenating the latitude a comma, the longitude a comma and altitude.
 
 #### Tile
-A map tile is 4 corner polygon that has 4 DD coordinates that confine its area. A tile looks like a perfect square on a Mercator project map although in reaiity it is a trapezoid due to the curvature of the earth.
+A map tile is 4 corner quadrilateral that has 4 DD coordinates that confine its area. A tile looks like a perfect square on a Mercator project map although in reaiity it is a trapezoid due to the curvature of the earth.
 
 #### Cube
 A cube is a vector that has 8 DD3C units that confine its space on a 3D map.
@@ -37,10 +37,10 @@ A cube is a vector that has 8 DD3C units that confine its space on a 3D map.
 The area that covers all places on earth on a Mercator projected map [[90,-180],[90,180],[-90,180],[-90,-180]].
 or a bbox [-180,-90,180,90] in geoJSON notation where longitude preceeds latitude. 
 
-#### Tile factor
+#### Tile factor - Granularity
 The number of tiles that fill up 2D root map horizontally or vertically which is calculated by powering 10 by G (Granularity).
 
-#### Granularity
+#### Decimal Granularity
 The granularity (G) number represents how many times the algorithm splits the 2D root map into 10x10 tiles.
 On granulariy 1 there are 100 tiles (10x10), on level 2 10,000 tiles and so on. 
 The maximum number of tiles is 100 power of G. A tile on granularity 7 on the equator has an estimated width of 4 meters. A tile on granularity level 8 has about 40 cm width and so on. Basically, there are very few applications that would need granulartiy 10 where the maximum width of a tile is about 4 mm.
@@ -55,10 +55,26 @@ A cube is denoted by number by concatenating G (granularity), X for horizontal d
 In a simpsitic way one can define a tile as a cube with an ommited height as can be inferred from the [BBOX spec](https://stevage.github.io/geojson-spec/#section-5). "The value of a bbox vector must be an array of length 2*n where n is the number of dimensions with all axes of the most southwesterly and deepest point followed by all axes of the more northeasterly and elevated point".
 
 #### TBOX - Tile Box
-Bounding recangle that outlines the bounds of all tiles that are between an anchor tile northwest corner and an pposing tile's southeast corner (hinch). A tilebox can be defined by one number that includes the tile number anchor at the interger part of a number and the distances in tiles to the oposing (hinch) tile at the decimal part of that number.
+Bounding quadrilateral that outlines the bounds of all tiles that are between an anchor tile northwest corner and an pposing tile's southeast corner (hinch). A tilebox can be defined by one number that includes the tile number anchor at the interger part of a number and the distances in tiles to the oposing (hinch) tile at the decimal part of that number.
+
+#### TBOX "abcd" notation
+The set of corners that delimit a quadrilatieral are by letters that are orders clockwise from the northwest corner.
+Northwestern DD corner is denominated "a" or "nw". 
+Northeastern DD corner is denominated "b" or "ne".
+Southeastern DD corner is denominated "c" or "sw". 
+Northeastern DD corner is denominated "d" or "se".
+Northwestern tile in a tilebox is denominated "at" or "nwt". 
+Northeastern tile in a tilebox is denominated "bt" or "net".
+Southeastern tile in a tilebox is denominated "ct" or "swt". 
+Northeastern tile in a tilebox is denominated "dt" or "set".
+
+
 
 #### CBOX - Cube Box
 Bounding box represents a 3D area that contains all cubes situated between the northwest deppest cube (anfhor) corner and an opposing cube (hinch) south-east most eleveted conrer.
+
+#### BBOX
+To formula to create a geoJSON bbox [flipped(sw),flipped(ne)] where "flipped" means flipping the order of coordinates.
 
 #### 3D Root Map
 A pseudo 3D bbox that covers all places on the sea level on earth on a Mercator projected map [-90,-180,0,90,180,0
@@ -98,7 +114,4 @@ The G and F guide digits delimit the bbox number at the edges.
 
 
 ### Hatching or Bboxing
-Hatching of Bboxing is an operation of extending a basic tile of cube by adding the corressponding digits at the decimal part of the tile/cube number after the dot. A guiding final digit (F) is added at the end of the decimal part to avoid the effect vanishing traling zeros and to indicate how many digits are needed for expanding a cube or tile in each dimension as rtelated to the anchor. Figuratively. bboxing a cube is a process of inflating it to the northeast end by gluing (or replicating) X2 cubes to the east, Y2 cubes to the north and E2 to the sky creating a new bigger box (which is composed by basic similar cubes glued together). Hatching is done by adding a corresponding number ("Hitch" number) as a decimal part of a cube/tile. Hatching saves coding of big numbers of adjacent cubes that are contained in a box by the use of only one number and reusing an anchor number as its cube part and addting hitch number that represents an opposing vertex to the anchor.
-
-
-
+Hatching of Bboxing is an operation of extending a basic tile or a cube into a tbox and cbox by adding the corressponding increments. Digits of the increments (xi, yi, ei) are added  at the decimal part of the tile/cube number after the dot. A guiding final digit (F) is added at the end of the decimal part to avoid the effect vanishing traling zeros and to indicate how many digits are needed for expanding a cube or tile in each dimension as rtelated to the anchor. Figuratively. bboxing a cube is a process of inflating it to the northeast end by gluing (or replicating) XI cubes to the east, YI cubes to the south and EI to the sky creating a new bigger box (which is composed by basic similar cubes glued together). Hatching is done by adding a corresponding number ("Hitch" number) as a decimal part of a cube/tile. Hatching saves coding of big numbers of adjacent cubes that are contained in a box by the use of only one number and reusing an anchor number as its cube part and addting hitch number that represents an opposing vertex to the anchor.
