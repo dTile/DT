@@ -1,7 +1,7 @@
 # Decimal Tile Notation (DTN)
 
 ## Goal
-Shorthand mathematical represenation of perimeters that used for a fast and coherent gridding and bounding of maps. DTN uses aggregate short notation of tiles using only decimal numbers instead of the use of commas, brackes, arrays or vectors that represent degrees, minutes and seconds. This notation is extended to cubes and boxes by adding an elevation parameter. Thus, a mathematical representation of a set cubes may be used on virtual 3D printer for printing a model of a spatial area such as a city block, a room or a mountain. 
+Shorthand mathematical represenation of perimeters that can be used as a standard for a fast and coherent gridding and bounding of map areas. DTN uses aggregate short notation of tiles using only decimal numbers instead of the use of commas, brackes, arrays or vectors that represent degrees, minutes and seconds. This notation is extended to cubes and boxes by adding an elevation parameter. Thus, a mathematical representation of a set cubes may be used on virtual 3D printer for printing a model of a spatial area such as a city block, a room or a mountain. 
 
 ## Motivation
 A simple use of numbers that may represent areas for fast and coherent reference for the use of Real Estate agencies, gaming applications, nature disaster repsonse teams, evacuation area assignment, traffic management, architecture, navigation, news alerts, weather forcasts and so on.
